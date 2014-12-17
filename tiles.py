@@ -64,6 +64,16 @@ class tile(object):
         self.up = tilegrid[self.y-1, self.x]
         self.down = tilegrid[self.y+1, self.x]
         self.right = tilegrid[self.y, self.x+1]
+        horiz = [self.left.iswater, self.right.iswater]
+        vert = [self.up.iswater, self.down.iswater]
+        #lowpass filter
+        if horiz == [True, True] or vert == [True, True]:
+            if self.iswater == False:
+                self.iswater = True
+        if horiz == [False, False] and vert == [False, False]:
+            if self.iswater == True:
+                self.iswater == False
+
 
     def popadd(self, pop):
         '''add population from people moving when neighbors run popout()'''
