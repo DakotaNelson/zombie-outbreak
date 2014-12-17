@@ -60,7 +60,7 @@ class Grid:
 
 class Resources:
     def __init__(self, difficulty):
-        # difficulty should be roughly 1-5
+        # difficulty should be 1-5
         if difficulty < 1: difficulty = 1
         if difficulty > 5: difficulty = 5
         booty = 6 - int(difficulty)
