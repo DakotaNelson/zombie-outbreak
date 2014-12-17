@@ -9,6 +9,9 @@ class bordertile(object):
         self.y = loc[1]
         #border tiles are always water
         self.iswater = True
+        self.hum = 0
+        self.zom = 0
+        self.ded = 0
 
     def color(self):
         return [0, 0, 255]

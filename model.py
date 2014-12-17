@@ -52,6 +52,27 @@ class Grid:
         ''' get number of bodies at a position '''
         return self.grid[pos[0]][pos[1]].ded
 
+    def totalZombies(self):
+        ''' get number of zombies on the map '''
+        return self.total('zom')
+
+    def totalHumans(self):
+        ''' get number of humans on the map '''
+        return self.total('hum')
+
+    def totalDead(self):
+        ''' get number of bodies on the map '''
+        return self.total('ded')
+
+    def total(self, thing):
+        ''' get number of [thing] on the map '''
+        total = 0
+        for y in range(self.h):
+            for x in range(self.w):
+                tile = self.grid[x][y]
+                total += getattr(tile,thing)
+        return total
+
     def destroy(self, humans, zombies, pos):
         ''' destroy some humans and zombies at a position '''
         self.grid[pos[0]][pos[1]].hum -= int(humans)

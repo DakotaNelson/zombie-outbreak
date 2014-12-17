@@ -29,9 +29,13 @@ class View:
                 pygame.draw.rect(self.screen, tile.color(), rect, 0)
 
         # now draw text
-        airstrikes = "Airstrikes: " + str(res.airstrikes)
+        airstrikes = "Airstrikes: " + str(int(res.airstrikes))
         label = self.font.render(airstrikes, 1, (0, 0, 0))
         self.screen.blit(label, (5,self.size+5))
+
+        totalHumans = "Total humans: " + str(data.totalHumans())
+        label = self.font.render(totalHumans, 1, (0, 0, 0))
+        self.screen.blit(label, (150,self.size+5))
 
         # and make a screen refresh happen
         pygame.display.update()
