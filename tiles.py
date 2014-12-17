@@ -53,7 +53,7 @@ class tile(object):
         '''on startup, determine whether or not this tile is water'''
         waterprob = abs(self.x - 50.0) * abs(self.y - 50.0)
         ran = random.randint(0, 2500)
-        if ran > waterprob:
+        if ran >= waterprob:
             self.iswater = False
         if ran < waterprob:
             self.iswater = True
@@ -81,7 +81,7 @@ class tile(object):
         uphzf = self.up.hzrat()
         downhzf = self.down.hzrat()
         righthzf = self.right.hzrat()
-        neighbhz = lefthzf + uphzf + downhzf + righthzf 
+        neighbhz = lefthzf + uphzf + downhzf + righthzf
         #calculate outflow
         outflow = (0.6/(self.hzrat+1))
         zout = outflow*self.zom

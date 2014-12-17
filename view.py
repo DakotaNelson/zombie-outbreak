@@ -10,10 +10,10 @@ class View:
         pygame.display.set_caption("Zombie Outbreak Simulation")
         self.squareHeight = h / grid.h # how big to make each square on the map
         self.squareWidth = w / grid.w
-        self.screen.fill((255,255,255))
         pygame.display.update()
 
     def update(self):
+        self.screen.fill((255,255,255))
         for row in self.grid.grid:
             for tile in row:
                 rect = (tile.x * self.squareWidth,
