@@ -26,7 +26,7 @@ class View:
         # given x,y in pixels, return x,y in grid location
         x = pos[0]
         y = pos[1]
-        column = y // self.squareWidth
-        row = x // self.squareHeight
-        return [row,column]
+        column = x // self.squareWidth
+        row = y // self.squareHeight
+        return [column,row]
 

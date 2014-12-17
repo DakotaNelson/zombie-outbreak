@@ -20,6 +20,10 @@ view = View(800, data)
 # init the controller
 con = Controller(data)
 
+# max fps at which to run
+fps = 10
+counter = 0
+
 # -------- Main Program Loop -----------
 while not done:
     for event in pygame.event.get(): # User did something
@@ -32,9 +36,13 @@ while not done:
             gridPos = view.getGridLocation(pos)
             con.airstrike(gridPos, data)
 
-    data.update() # update the map (steps all of the diff. eqs. forward one)
-    view.update(data)
+    if counter == 0:
+        # only update once per second (n ticks)
+        data.update() # update the map (steps all of the diff. eqs. forward one)
+        view.update(data)
 
-    clock.tick(1) # 1 fps
+    counter = (counter+1) % fps
+
+    clock.tick(fps) # max fps
 
 pygame.quit()
