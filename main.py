@@ -1,5 +1,5 @@
 import pygame
-from model import Grid
+from model import Grid, Resources
 from view import View
 from controller import Controller
 
@@ -18,7 +18,14 @@ data = Grid(100)
 view = View(800, data)
 
 # init the controller
-con = Controller(data)
+con = Controller()
+
+# init the global resources count
+res = Resources(1) # 1 = easiest difficulty, 5 = hardest
+
+# max fps at which to run
+fps = 10
+counter = 0
 
 # -------- Main Program Loop -----------
 while not done:
@@ -30,11 +37,15 @@ while not done:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             gridPos = view.getGridLocation(pos)
-            con.airstrike(gridPos, data)
+            con.airstrike(gridPos, data, res)
 
-    data.update() # update the map (steps all of the diff. eqs. forward one)
-    view.update(data)
+    if counter == 0:
+        # only update once per second (n ticks)
+        data.update() # update the map (steps all of the diff. eqs. forward one)
+        view.update(data, res)
 
-    clock.tick(1) # 1 fps
+    counter = (counter+1) % fps
+
+    clock.tick(fps) # max fps
 
 pygame.quit()
