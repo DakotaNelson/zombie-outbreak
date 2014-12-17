@@ -7,12 +7,10 @@ class tile(object):
         self.y = loc[1]
         self.iswater()
         if self.iswater:
-            pop = [0.0, 0.0, 0.0, 0.0, 0.0]
+            pop = [0.0, 0.0, 0.0]
         self.hum = pop[0]
-        self.inf = pop[1]
-        self.zom = pop[2]
-        self.ded = pop[3]
-        self.gon = pop[4]
+        self.zom = pop[1]
+        self.ded = pop[2]
 
     def iswater(self):
         waterprob = abs(self.x - 50.0) * abs(self.y - 50.0)
@@ -31,10 +29,8 @@ class tile(object):
     def popadd(self, pop):
         if not self.iswater:
             self.hum += pop[0]
-            self.inf += pop[1]
-            self.zom += pop[2]
-            self.ded += pop[3]
-            self.gon += pop[4]
+            self.zom += pop[1]
+            self.ded += pop[2]
 
     def hzrat(self):
         try:
@@ -42,7 +38,7 @@ class tile(object):
         except ZeroDivisionError:
             return float(self.hum)
 
-    def color(self): 
+    def color(self):
         if self.iswater:
             return [0, 0, 255]
         else:
@@ -53,11 +49,11 @@ class tile(object):
             return [red, green, 0]
 
 def main():
-    initpop = [10, 1, 3, 1, 1]
+    initpop = [10, 3, 1]
     loc = [20, 4]
     home = tile(initpop, loc)
     print home.hzrat()
-    home.popadd([1,1,2,1,1])
+    home.popadd([1,2,1])
     print home.hzrat()
     print home.color()
     x = np.array([[1,2],[3,4]])
