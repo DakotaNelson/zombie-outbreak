@@ -36,6 +36,21 @@ class tile(object):
             self.ded += pop[3]
             self.gon += pop[4]
 
+    def popout(self)
+        lefthz = self.left.hzrat()
+        uphz = self.up.hzrat()
+        downhz = self.down.hzrat()
+        righthz = self.right.hzrat()
+        #placeholder math
+        leftpop = .1*self.hzrat()*lefthz
+        uppop = .1*self.hzrat()*uphz
+        downpop = .1*self.hzrat()*downhz
+        rightpop = .1*self.hzrat()*righthz
+        self.left.popadd(leftpop)
+        self.up.popadd(uppop)
+        self.down.popadd(downpop)
+        self.right.popadd(rightpop)
+
     def hzrat(self):
         try:
             return float(self.hum)/float(self.zom)
