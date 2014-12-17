@@ -10,17 +10,20 @@ class bordertile(object):
         #border tiles are always water
         self.iswater = True
 
-    def hzrat():
+    def color(self):
+        return [0, 0, 255]
+
+    def hzrat(self):
         #return is the same as it is for all water tiles
         return 0.0
 
 class tile(object):
     '''class for tiles on the map. each tile has a population. sometimes it is water'''
-    def __init__(self, pop, loc):
+    def __init__(self, pop, loc, cen):
         '''initializes each tile with a location, a population, and a water state'''
         self.x = loc[0]
         self.y = loc[1]
-        self.iswaterinit()
+        self.iswaterinit(cen)
         #no population if the tile is full of water
         if self.iswater:
             pop = np.array([0.0, 0.0, 0.0])
@@ -49,28 +52,28 @@ class tile(object):
         self.zom = pop[1]
         self.ded = pop[2]
 
-    def iswaterinit(self):
+    def iswaterinit(self, cen):
         '''on startup, determine whether or not this tile is water'''
-        waterprob = abs(self.x - 50.0) * abs(self.y - 50.0)
-        ran = random.randint(0, 2500)
-        if ran >= waterprob:
+        waterprob = abs(self.x - float(cen[0])) * abs(self.y - float(cen[1]))
+        ran = random.randint(0, cen[0]*cen[1])
+        if ran >= .3*waterprob:
             self.iswater = False
-        if ran < waterprob:
+        if ran < .3*waterprob:
             self.iswater = True
 
     def findneighbors(self,tilegrid):
         '''once the entire grid is populated with tiles, find the neighbors'''
-        self.left = tilegrid[self.y, self.x-1]
-        self.up = tilegrid[self.y-1, self.x]
-        self.down = tilegrid[self.y+1, self.x]
-        self.right = tilegrid[self.y, self.x+1]
+        self.left = tilegrid[self.x-1][self.y]
+        self.up = tilegrid[self.x][self.y-1]
+        self.down = tilegrid[self.x][self.y+1]
+        self.right = tilegrid[self.x+1][self.y]
         horiz = [self.left.iswater, self.right.iswater]
         vert = [self.up.iswater, self.down.iswater]
         #lowpass filter
         if horiz == [True, True] or vert == [True, True]:
             if self.iswater == False:
                 self.iswater = True
-        if horiz == [False, False] and vert == [False, False]:
+        if horiz == [False, False] or vert == [False, False]:
             if self.iswater == True:
                 self.iswater == False
 
