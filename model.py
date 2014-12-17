@@ -27,15 +27,19 @@ class Grid:
         print self.dead(pos)
 
     def zombies(self, pos):
+        ''' get number of zombies at a position '''
         return self.grid[pos[0]][pos[1]].zom
 
     def humans(self, pos):
+        ''' get number of humans at a position '''
         return self.grid[pos[0]][pos[1]].hum
 
     def dead(self, pos):
+        ''' get number of bodies at a position '''
         return self.grid[pos[0]][pos[1]].ded
 
     def destroy(self, humans, zombies, pos):
+        ''' destroy some humans and zombies at a position '''
         self.grid[pos[0]][pos[1]].hum -= int(humans)
         self.grid[pos[0]][pos[1]].zom -= int(zombies)
 
@@ -44,6 +48,10 @@ class Grid:
 
         self.grid[pos[0]][pos[1]].ded += int(humans + zombies)
         return [self.grid[pos[0]][pos[1]].hum, self.grid[pos[0]][pos[1]].zom, self.grid[pos[0]][pos[1]].ded]
+
+    def update(self):
+        ''' advance the DEs by one tick '''
+        return
 
 
 class Resources:

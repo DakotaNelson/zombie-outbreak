@@ -30,11 +30,10 @@ while not done:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             gridPos = view.getGridLocation(pos)
-            con.airstrike(gridPos)
+            con.airstrike(gridPos, data)
 
-    #data.update() # update the map (steps all of the diff. eqs. forward one)
-    view.update()
-
+    data.update() # update the map (steps all of the diff. eqs. forward one)
+    view.update(data)
 
     clock.tick(1) # 1 fps
 

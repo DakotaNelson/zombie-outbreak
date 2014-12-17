@@ -3,23 +3,22 @@ from random import randint
 
 class Controller:
     def __init__(self, grid):
-        self.grid = grid
         return
 
-    def airstrike(self, pos):
+    def airstrike(self, pos, data):
         # launch an airstrike on a tile
         print "airstrike at: " + str(pos)
 
         print "before"
-        self.grid.printSquare(pos)
+        data.printSquare(pos)
 
         humPercent = float(randint(0, 30)) / 100.0
         zomPercent = float(randint(40, 80)) / 100.0
 
-        humCasualties = ceil(humPercent * self.grid.humans(pos))
-        zomCasualties = ceil(zomPercent * self.grid.zombies(pos))
-        self.grid.destroy(humCasualties, zomCasualties, pos)
+        humCasualties = ceil(humPercent * data.humans(pos))
+        zomCasualties = ceil(zomPercent * data.zombies(pos))
+        data.destroy(humCasualties, zomCasualties, pos)
 
         print "after"
-        self.grid.printSquare(pos)
+        data.printSquare(pos)
 

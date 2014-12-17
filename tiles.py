@@ -112,19 +112,21 @@ class tile(object):
         try:
             return float(self.hum)/float(self.zom)
         except ZeroDivisionError:
-            return float(self.hum)
+            return -1.0
 
     def color(self):
         '''generate a color for the tile. to be used in pygame'''
         if self.iswater:
             return [0, 0, 255]
+        elif self.hzrat() == -1:
+            return [0, 255, 0]
         else:
             try:
-                red = int(51*(1.0/self.hzrat()))
+                red = int(5*(1.0/self.hzrat()))
                 if red > 255: red = 255
             except ZeroDivisionError:
                 red = 255
-            green = int(51*self.hzrat())
+            green = int(5*self.hzrat())
             if green > 255: green = 255
             return [red, green, 0]
 
