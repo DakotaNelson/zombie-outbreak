@@ -23,7 +23,12 @@ class Grid:
         cen = [randint(1,100),randint(1,100)]
         for y in range(1, self.h-1):
             for x in range(1, self.w-1):
-                pop = [randint(1,100),randint(0,5),0]
+                if randint(1,10000) <= 30:
+                    # how likely there is to be a zombie on any given square
+                    zombies = randint(1,3)
+                else:
+                    zombies = 0
+                pop = [randint(1,100),zombies,0]
                 loc = [x,y]
                 self.grid[x][y] = tile(pop,loc,cen)
         for m in range(2):
