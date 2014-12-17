@@ -11,7 +11,11 @@ class Grid:
         # fill it with tile objects
         for y in range(self.h):
             for x in range(self.w):
-                pop = [randint(1,100),randint(0,5),0]
+                if randint(1,10000) <= 10:
+                    zombies = randint(1,3)
+                else:
+                    zombies = 0
+                pop = [randint(1,100),zombies,0]
                 loc = [x,y]
                 self.grid[x][y] = tile(pop,loc)
                 #TODO edge cases should be border tile

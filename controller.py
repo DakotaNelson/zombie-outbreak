@@ -9,16 +9,10 @@ class Controller:
         # launch an airstrike on a tile
         print "airstrike at: " + str(pos)
 
-        print "before"
-        data.printSquare(pos)
-
         humPercent = float(randint(0, 30)) / 100.0
         zomPercent = float(randint(40, 80)) / 100.0
 
         humCasualties = ceil(humPercent * data.humans(pos))
         zomCasualties = ceil(zomPercent * data.zombies(pos))
         data.destroy(humCasualties, zomCasualties, pos)
-
-        print "after"
-        data.printSquare(pos)
 
