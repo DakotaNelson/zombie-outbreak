@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 class tile(object):
     def __init__(self, pop, loc):
@@ -20,6 +21,12 @@ class tile(object):
             self.iswater = False
         if ran < waterprob:
             self.iswater = True
+
+    def findneighbors(self,tilegrid):
+        self.left = tilegrid[x-1, y]
+        self.up = tilegrid[x, y-1]
+        self.down = tilegrid[x, y+1]
+        self.right = tilegrid[x+1, y]
 
     def popadd(self, pop):
         if not self.iswater:
@@ -53,6 +60,8 @@ def main():
     home.popadd([1,1,2,1,1])
     print home.hzrat()
     print home.color()
+    x = np.array([[1,2],[3,4]])
+    print x[1,1]
 
 if __name__ == "__main__":
     main()
