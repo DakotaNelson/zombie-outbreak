@@ -60,7 +60,8 @@ class View:
 
         # display row two
         airstrikes = "Airstrikes: " + str(int(res.airstrikes))
-        row2_size = self.displayRow([airstrikes], self.size + row1_size[1])
+        infantry = "Infantry: " + str(int(res.infantry))
+        row2_size = self.displayRow([airstrikes, infantry], self.size + row1_size[1])
 
         # and make a screen refresh happen
         pygame.display.update()

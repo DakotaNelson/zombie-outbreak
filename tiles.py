@@ -41,7 +41,7 @@ class tile(object):
         self.ded = pop[2]
 
     def hzd(self):
-        alpha = .05 # rate at which humans become zombies
+        alpha = .02 # rate at which humans become zombies
         # (i.e. probability of being infected when you come in contact with the infected)
         beta = .02  # rate at which zombies die
         # (i.e. probability of dying when you come in contact with a human)
@@ -156,7 +156,7 @@ class tile(object):
         if self.iswater:
             return [0, 0, 255]
         else:
-            red = int(5*self.zom)
+            red = int(2*self.zom)
             if red > 255: red = 255
             green = int(255*self.hzrat())
             return [red, green, 0]

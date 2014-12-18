@@ -40,7 +40,10 @@ while not done:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             gridPos = view.getGridLocation(pos)
-            con.airstrike(gridPos, data, res)
+            if event.button == 1:
+                con.airstrike(gridPos, data, res)
+            elif event.button == 3:
+                con.infantry(gridPos, data, res)
 
     if counter == 0:
         # only update once per second (n ticks)
@@ -48,7 +51,7 @@ while not done:
         data.update() # update the map (steps all of the diff. eqs. forward one)
         view.update(data, metadata, res)
 
-    counter = (counter+1) % fps
+    counter = (counter+1) % (fps/10)
 
     clock.tick(fps) # max fps
 

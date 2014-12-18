@@ -87,7 +87,18 @@ class Grid:
         if self.grid[pos[0]][pos[1]].zom < 0: self.grid[pos[0]][pos[1]].zom = 0
 
         self.grid[pos[0]][pos[1]].ded += int(humans + zombies)
-        return [self.grid[pos[0]][pos[1]].hum, self.grid[pos[0]][pos[1]].zom, self.grid[pos[0]][pos[1]].ded]
+        return [self.grid[pos[0]][pos[1]].hum, 
+                self.grid[pos[0]][pos[1]].zom, 
+                self.grid[pos[0]][pos[1]].ded]
+
+    def add(self, humans, zombies, pos):
+        '''add some humans and zombies at a position'''
+        self.grid[pos[0]][pos[1]].hum += int(humans)
+        self.grid[pos[0]][pos[1]].zom += int(zombies)
+
+        return [self.grid[pos[0]][pos[1]].hum, 
+                self.grid[pos[0]][pos[1]].zom, 
+                self.grid[pos[0]][pos[1]].ded]
 
     def update(self):
         ''' advance the DEs by one tick '''
@@ -109,6 +120,7 @@ class Resources:
 
         # with great booty comes great numbers of armaments
         self.airstrikes = randint(1,10) * booty
+        self.infantry = randint(5,20) * 50 * booty
 
 class Metadata:
     def __init__(self, data):
