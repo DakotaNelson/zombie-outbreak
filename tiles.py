@@ -16,6 +16,11 @@ class bordertile(object):
     def color(self):
         return [0, 0, 255]
 
+    def popadd(self,pop):
+        self.hum = 0
+        self.zom = 0
+        self.ded = 0
+
     def hzrat(self):
         #return is the same as it is for all water tiles
         return 0.0
@@ -97,43 +102,43 @@ class tile(object):
         uphzf = self.up.hzrat()
         downhzf = self.down.hzrat()
         righthzf = self.right.hzrat()
-        neighbhz = lefthzf + uphzf + downhzf + righthzf
+        neighbhzf = lefthzf + uphzf + downhzf + righthzf
+        if neighbhzf == 0:
+            neighbhzf = 1
         #calculate outflow
-        outflow = (0.6/(self.hzrat+1))
+        outflow = (0.6/(self.hzrat()+1))
         zout = outflow*self.zom
         hout = outflow*self.hum
         #comment on american consumerism
         leftpop = [hout*lefthzf/neighbhzf, zout*lefthzf/neighbhzf, 0]
-        uppop = [hout*lefthzf/neighbhzf, zout*uphzf/neighbhzf, 0]
-        downpop = [hout*lefthzf/neighbhzf, zout*downhzf/neighbhzf, 0]
-        rightpop = [hout*lefthzf/neighbhzf, zout*righthzf/neighbhzf, 0]
+        uppop = [hout*uphzf/neighbhzf, zout*uphzf/neighbhzf, 0]
+        downpop = [hout*downhzf/neighbhzf, zout*downhzf/neighbhzf, 0]
+        rightpop = [hout*righthzf/neighbhzf, zout*righthzf/neighbhzf, 0]
+        outpop = [0, 0, 0]
+        for i in range(3):
+            outpop[i] = -1*(leftpop[i] + uppop[i] + downpop[i] + rightpop[i])
         #now increment everything
         self.left.popadd(leftpop)
         self.up.popadd(uppop)
         self.down.popadd(downpop)
         self.right.popadd(rightpop)
+        self.popadd(outpop)
 
     def hzrat(self):
         '''calculate the human-zombie ratio. used for math later'''
         try:
-            return float(self.hum)/float(self.zom)
+            return float(self.hum)/(float(self.zom)+float(self.hum))
         except ZeroDivisionError:
-            return -1.0
+            return 0.0
 
     def color(self):
         '''generate a color for the tile. to be used in pygame'''
         if self.iswater:
             return [0, 0, 255]
-        elif self.hzrat() == -1:
-            return [0, 255, 0]
         else:
-            try:
-                red = int(5*(1.0/self.hzrat()))
-                if red > 255: red = 255
-            except ZeroDivisionError:
-                red = 255
-            green = int(5*self.hzrat())
-            if green > 255: green = 255
+            red = int(100000*self.zom)
+            if red > 255: red = 255
+            green = int(255*self.hzrat())
             return [red, green, 0]
 
 def main():
