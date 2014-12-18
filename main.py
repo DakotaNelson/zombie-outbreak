@@ -1,5 +1,5 @@
 import pygame
-from model import Grid, Resources
+from model import Grid, Resources, Metadata
 from view import View
 from controller import Controller
 
@@ -15,13 +15,16 @@ clock = pygame.time.Clock()
 data = Grid(50)
 
 # init the view of the map
-view = View(800, data)
+view = View(750, data)
 
 # init the controller
 con = Controller()
 
 # init the global resources count
 res = Resources(1) # 1 = easiest difficulty, 5 = hardest
+
+# init the random data class
+metadata = Metadata(data)
 
 # max fps at which to run
 fps = 10
@@ -41,8 +44,9 @@ while not done:
 
     if counter == 0:
         # only update once per second (n ticks)
+        metadata.update()
         data.update() # update the map (steps all of the diff. eqs. forward one)
-        view.update(data, res)
+        view.update(data, metadata, res)
 
     counter = (counter+1) % fps
 

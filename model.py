@@ -109,3 +109,12 @@ class Resources:
 
         # with great booty comes great numbers of armaments
         self.airstrikes = randint(1,10) * booty
+
+class Metadata:
+    def __init__(self, data):
+        self.days = 0 # number of days in the game that have passed
+        self.initialHumans = data.totalHumans()
+
+    def update(self):
+        # run each tick
+        self.days += 1
