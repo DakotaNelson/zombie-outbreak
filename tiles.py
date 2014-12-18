@@ -1,4 +1,5 @@
 import random
+
 import math
 import numpy as np
 from scipy.integrate import odeint
@@ -26,6 +27,9 @@ class bordertile(object):
         #return is the same as it is for all water tiles
         return 0.0
 
+    def hzdef(self):
+        return 0.0
+
 class tile(object):
     '''class for tiles on the map. each tile has a population. sometimes it is water'''
     def __init__(self, pop, loc, cen):
@@ -35,7 +39,7 @@ class tile(object):
         self.iswaterinit(cen)
         #no population if the tile is full of water
         if self.iswater:
-            pop = np.array([0.0, 0.0, 0.0])
+            pop = [0, 0, 0]
         self.hum = pop[0]
         self.zom = pop[1]
         self.ded = pop[2]
@@ -114,6 +118,10 @@ class tile(object):
             self.ded += pop[2]
         else:
             pass
+    
+    def hzdef(self):
+        '''calculate the human-zombie difference. used for math later'''
+        return self.hum - self.zom
 
     def popout(self):
         '''simulates population emigration'''
@@ -144,12 +152,55 @@ class tile(object):
         self.right.popadd(rightpop)
         self.popadd(outpop)
 
+    def popout2(self):
+        '''simulates population emigration'''
+        #calculate local ratios
+        selfhzf = self.hzrat()
+        lefthzf = self.left.hzrat()
+        uphzf = self.up.hzrat()
+        downhzf = self.down.hzrat()
+        righthzf = self.right.hzrat()
+        lefthzr = lefthzf - selfhzf
+        uphzr = uphzf - selfhzf
+        downhzr = downhzf - selfhzf
+        righthzr = righthzf - selfhzf
+        hzrlist = [lefthzr, uphzr, downhzr, righthzr]
+        hzrsum = 0
+        for i in xrange(len(hzrlist)):
+            if hzrlist[i] < 0:
+                hzrlist[i] = 0
+            hzrsum += hzrlist[i]
+        if hzrsum < .01: hzrsum = 1
+        #comment on american consumerism
+        leftpop = [.7*hzrlist[0]/hzrsum*self.hum, .7*hzrlist[0]/hzrsum*self.zom, 0]
+        uppop = [.7*hzrlist[1]/hzrsum*self.hum, .7*hzrlist[1]/hzrsum*self.zom, 0]
+        downpop = [.7*hzrlist[2]/hzrsum*self.hum, .7*hzrlist[2]/hzrsum*self.zom, 0]
+        rightpop = [.7*hzrlist[3]/hzrsum*self.hum, .7*hzrlist[3]/hzrsum*self.zom, 0]
+        if self.left.iswater: leftpop = [0, 0, 0]
+        if self.up.iswater: uppop = [0, 0, 0]
+        if self.down.iswater: downpop = [0, 0, 0]
+        if self.right.iswater: rightpop = [0, 0, 0]
+        outpop = [0, 0, 0]
+        for i in range(3):
+            outpop[i] = -1*(leftpop[i] + uppop[i] + downpop[i] + rightpop[i])
+        #now increment everything
+        self.left.popadd(leftpop)
+        self.up.popadd(uppop)
+        self.down.popadd(downpop)
+        self.right.popadd(rightpop)
+        self.popadd(outpop)
+        
     def hzrat(self):
         '''calculate the human-zombie ratio. used for math later'''
-        try:
-            return float(self.hum)/(float(self.zom)+float(self.hum))
-        except ZeroDivisionError:
-            return 0.0
+        if False:
+           pass
+        #if self.hum == 0 and self.zom == 0:
+        #    return 0.1
+        else:
+            try:
+                return (float(self.hum + 1))/(float(self.zom)+float(self.hum))
+            except ZeroDivisionError:
+                return 0.0
 
     def color(self):
         '''generate a color for the tile. to be used in pygame'''
@@ -157,8 +208,11 @@ class tile(object):
             return [0, 0, 255]
         else:
             red = int(2*self.zom)
+            if red < 0: red = 0
             if red > 255: red = 255
             green = int(255*self.hzrat())
+            if green < 0: green = 0
+            if green > 255: green = 255
             return [red, green, 0]
 
 def main():
