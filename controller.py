@@ -13,9 +13,8 @@ class Controller:
             humPercent = float(randint(0, 30)) / 100.0
             zomPercent = float(randint(40, 80)) / 100.0
 
-            humCasualties = ceil(humPercent * data.humans(pos))
-            zomCasualties = ceil(zomPercent * data.zombies(pos))
-            data.destroy(humCasualties, zomCasualties, pos)
+            data.destroyPercent(humPercent, zomPercent, pos)
+            data.neighborDestroyPercent(humPercent, zomPercent, pos)
 
             resources.airstrikes -= 1
         else:
@@ -32,5 +31,3 @@ class Controller:
             resources.infantry -= 50
         else:
             print "No militia left."
-
-

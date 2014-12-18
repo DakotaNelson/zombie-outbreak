@@ -1,6 +1,7 @@
 from tiles import tile, bordertile
 import numpy as np
 from random import randint
+import math
 
 class Grid:
     def __init__(self, size):
@@ -87,18 +88,52 @@ class Grid:
         if self.grid[pos[0]][pos[1]].zom < 0: self.grid[pos[0]][pos[1]].zom = 0
 
         self.grid[pos[0]][pos[1]].ded += int(humans + zombies)
-        return [self.grid[pos[0]][pos[1]].hum, 
-                self.grid[pos[0]][pos[1]].zom, 
+        return [self.grid[pos[0]][pos[1]].hum,
+                self.grid[pos[0]][pos[1]].zom,
                 self.grid[pos[0]][pos[1]].ded]
+
+    def neighborDestroy(self, humans, zombies, pos):
+        ''' destroy some humans and zombies in a position's immediate neighbors '''
+        x = pos[0]
+        y = pos[1]
+        if x>0:
+            self.destroy(humans, zombies, [x-1,y])
+        if x<self.w-1:
+            self.destroy(humans, zombies, [x+1,y])
+        if y>0:
+            self.destroy(humans, zombies, [x,y-1])
+        if y<self.h-1:
+            self.destroy(humans, zombies, [x,y+1])
 
     def add(self, humans, zombies, pos):
         '''add some humans and zombies at a position'''
         self.grid[pos[0]][pos[1]].hum += int(humans)
         self.grid[pos[0]][pos[1]].zom += int(zombies)
 
-        return [self.grid[pos[0]][pos[1]].hum, 
-                self.grid[pos[0]][pos[1]].zom, 
+        return [self.grid[pos[0]][pos[1]].hum,
+                self.grid[pos[0]][pos[1]].zom,
                 self.grid[pos[0]][pos[1]].ded]
+
+    def destroyPercent(self, humPercent, zomPercent, pos):
+        ''' destroy a percentage of humans and zombies at a position '''
+        humCasualties = math.ceil(humPercent * self.humans(pos))
+        zomCasualties = math.ceil(zomPercent * self.zombies(pos))
+
+        return self.destroy(humCasualties, zomCasualties, pos)
+
+    def neighborDestroyPercent(self, humanPercent, zombiePercent, pos):
+        ''' destroy a percentage of humans and zombies in a position's immediate neighbors '''
+        x = pos[0]
+        y = pos[1]
+        if x>0:
+            self.destroyPercent(humanPercent, zombiePercent, [x-1,y])
+        if x<self.w-1:
+            self.destroyPercent(humanPercent, zombiePercent, [x+1,y])
+        if y>0:
+            self.destroyPercent(humanPercent, zombiePercent, [x,y-1])
+        if y<self.h-1:
+            self.destroyPercent(humanPercent, zombiePercent, [x,y+1])
+
 
     def update(self):
         ''' advance the DEs by one tick '''
