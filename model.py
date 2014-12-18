@@ -94,6 +94,7 @@ class Grid:
         for y in range(1, self.h-1):
             for x in range(1, self.w-1):
                 self.grid[x][y].popout()
+                self.grid[x][y].update()
         return
 
 

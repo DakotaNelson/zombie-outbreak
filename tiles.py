@@ -1,4 +1,5 @@
 import random
+import math
 import numpy as np
 from scipy.integrate import odeint
 
@@ -40,25 +41,44 @@ class tile(object):
         self.ded = pop[2]
 
     def hzd(self):
-        alpha = 4.8 # rate at which humans become zombies
+        alpha = .05 # rate at which humans become zombies
         # (i.e. probability of being infected when you come in contact with the infected)
-        beta = .05  # rate at which zombies die
+        beta = .02  # rate at which zombies die
         # (i.e. probability of dying when you come in contact with a human)
-        gamma = .2 # rate at which humans die (without becoming zombies)
+        gamma = .00002 # rate at which humans die (without becoming zombies)
         # (i.e. probability of dying when you come in contact with another human)
-        return np.array([
-                -alpha*self.zom - gamma*self.hum,
-                alpha*self.zom - beta*self.hum,
-                beta*self.hum + gamma*self.hum])
+        h2z = alpha * self.zom * self.hum # humans -> zombies
+        z2d = beta * self.hum # zombies -> dead
+        h2d = gamma * self.hum # humans -> dead
 
-    def update(time):
-        '''given an array of time values, spits out a new population'''
-        pop = np.array([self.hum, self.zom, self.ded])
-        poplist = odeint(hzd, pop, time)
-        newpop = pop[-1]
-        self.hum = pop[0]
-        self.zom = pop[1]
-        self.ded = pop[2]
+        if random.random() < alpha: h2z = math.ceil(h2z)
+        else: h2z = math.floor(h2z)
+
+        if random.random() < beta: z2d = math.ceil(z2d)
+        else: z2d = math.floor(z2d)
+
+        if random.random() < gamma: h2d = math.ceil(h2d)
+        else: h2d = math.floor(h2d)
+
+        deltaH = -h2z-h2d
+        deltaZ = h2z-z2d
+
+        # never kill more humans or zombies than exist
+        if self.hum+deltaH < 0: deltaH = -self.hum
+        if self.zom+deltaZ < 0: deltaZ = -self.zom
+
+        return [deltaH, deltaZ, deltaZ+deltaH]
+
+    def update(self):
+        '''spits out a new population one time step in the future'''
+
+        # migration happens
+
+        # then apply the hzd model
+        step = self.hzd()
+        self.hum += int(step[0])
+        self.zom += int(step[1])
+        self.ded += int(step[2])
 
     def iswaterinit(self, cen):
         '''on startup, determine whether or not this tile is water'''
@@ -136,7 +156,7 @@ class tile(object):
         if self.iswater:
             return [0, 0, 255]
         else:
-            red = int(100000*self.zom)
+            red = int(5*self.zom)
             if red > 255: red = 255
             green = int(255*self.hzrat())
             return [red, green, 0]
